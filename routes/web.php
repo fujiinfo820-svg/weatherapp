@@ -1,11 +1,16 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WeatherController; // ★WeatherControllerを読み込む
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [WeatherController::class, 'index'])->name('weather.index');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/favorites', [WeatherController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites/{favorite}', [WeatherController::class, 'destroy'])->name('favorites.destroy');
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
